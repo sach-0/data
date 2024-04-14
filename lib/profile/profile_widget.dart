@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'profile_model.dart';
@@ -25,6 +26,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ProfileModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -44,7 +47,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
           return Scaffold(
-            backgroundColor: const Color(0xFFF1F4F8),
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             body: Center(
               child: SizedBox(
                 width: 50.0,
@@ -68,25 +71,35 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             : null;
         return Scaffold(
           key: scaffoldKey,
-          backgroundColor: const Color(0xFFF1F4F8),
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).primary,
+            backgroundColor: FlutterFlowTheme.of(context).secondaryText,
             automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30.0,
-              borderWidth: 1.0,
-              buttonSize: 60.0,
-              icon: const Icon(
-                Icons.arrow_back_rounded,
-                color: Colors.white,
-                size: 30.0,
-              ),
-              onPressed: () async {
+            leading: InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onDoubleTap: () async {
                 context.pushNamed('home');
 
                 HapticFeedback.lightImpact();
+                await actions.ttssound();
               },
+              child: FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30.0,
+                borderWidth: 1.0,
+                buttonSize: 60.0,
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.white,
+                  size: 30.0,
+                ),
+                onPressed: () async {
+                  await actions.ttsreturn();
+                },
+              ),
             ),
             title: Text(
               'Profile',
@@ -111,13 +124,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 children: [
                   Container(
                     width: MediaQuery.sizeOf(context).width * 1.0,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 1.0,
-                          color: Color(0xFFF1F4F8),
-                          offset: Offset(
+                          color: FlutterFlowTheme.of(context).accent1,
+                          offset: const Offset(
                             0.0,
                             0.0,
                           ),
@@ -157,29 +170,33 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  valueOrDefault<String>(
-                                    profileUserDetailsRecord.name,
-                                    '20',
+                                if (responsiveVisibility(
+                                  context: context,
+                                  phone: false,
+                                  tablet: false,
+                                  tabletLandscape: false,
+                                  desktop: false,
+                                ))
+                                  Text(
+                                    valueOrDefault<String>(
+                                      profileUserDetailsRecord.name,
+                                      '20',
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .headlineSmall
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: const Color(0xFF14181B),
+                                          fontSize: 24.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                   ),
-                                  style: FlutterFlowTheme.of(context)
-                                      .headlineSmall
-                                      .override(
-                                        fontFamily: 'Outfit',
-                                        color: const Color(0xFF14181B),
-                                        fontSize: 24.0,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
                                 Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       0.0, 4.0, 0.0, 0.0),
                                   child: Text(
-                                    valueOrDefault<String>(
-                                      profileUserDetailsRecord.email,
-                                      '30',
-                                    ),
+                                    currentUserEmail,
                                     style: FlutterFlowTheme.of(context)
                                         .bodySmall
                                         .override(
@@ -341,6 +358,45 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onDoubleTap: () async {
+                      context.pushNamed('Aboutus');
+
+                      await actions.ttssound();
+                    },
+                    child: FFButtonWidget(
+                      onPressed: () async {
+                        await actions.ttsAboutuspage();
+                      },
+                      text: 'Abot us',
+                      options: FFButtonOptions(
+                        width: 349.0,
+                        height: 134.0,
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            24.0, 0.0, 24.0, 0.0),
+                        iconPadding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
+                                  fontFamily: 'Readex Pro',
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                ),
+                        elevation: 3.0,
+                        borderSide: BorderSide(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding:
                         const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
@@ -348,37 +404,48 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FFButtonWidget(
-                          onPressed: () async {
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onDoubleTap: () async {
                             GoRouter.of(context).prepareAuthEvent();
                             await authManager.signOut();
                             GoRouter.of(context).clearRedirectLocation();
 
                             HapticFeedback.lightImpact();
+                            await actions.ttssound();
 
                             context.goNamedAuth('login', context.mounted);
                           },
-                          text: 'Log Out',
-                          options: FFButtonOptions(
-                            width: 90.0,
-                            height: 40.0,
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: Colors.white,
-                            textStyle:
-                                FlutterFlowTheme.of(context).bodySmall.override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: const Color(0xFF14181B),
-                                      fontSize: 14.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                            elevation: 1.0,
-                            borderSide: const BorderSide(
-                              color: Colors.transparent,
-                              width: 1.0,
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              await actions.ttslogout();
+                            },
+                            text: 'Log Out',
+                            options: FFButtonOptions(
+                              width: 163.0,
+                              height: 76.0,
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: Colors.white,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodySmall
+                                  .override(
+                                    fontFamily: 'Lexend Deca',
+                                    color: const Color(0xFF14181B),
+                                    fontSize: 14.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                              elevation: 1.0,
+                              borderSide: const BorderSide(
+                                color: Colors.transparent,
+                                width: 1.0,
+                              ),
                             ),
                           ),
                         ),

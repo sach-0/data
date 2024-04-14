@@ -99,6 +99,36 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'home',
           path: '/home',
           builder: (context, params) => const HomeWidget(),
+        ),
+        FFRoute(
+          name: 'PriceTagUrl',
+          path: '/PricetagUrl',
+          builder: (context, params) => const PriceTagUrlWidget(),
+        ),
+        FFRoute(
+          name: 'Aboutus',
+          path: '/aboutus',
+          builder: (context, params) => const AboutusWidget(),
+        ),
+        FFRoute(
+          name: 'chatUrl',
+          path: '/chatUrl',
+          builder: (context, params) => const ChatUrlWidget(),
+        ),
+        FFRoute(
+          name: 'chatboxpage',
+          path: '/chatboxpage',
+          builder: (context, params) => const ChatboxpageWidget(),
+        ),
+        FFRoute(
+          name: 'PriceTagPage',
+          path: '/priceTagPage',
+          builder: (context, params) => const PriceTagPageWidget(),
+        ),
+        FFRoute(
+          name: 'PriceTag',
+          path: '/PriceTag',
+          builder: (context, params) => const PriceTagWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

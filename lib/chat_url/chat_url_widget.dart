@@ -1,34 +1,35 @@
 import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
-import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/upload_data.dart';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'chat_model.dart';
-export 'chat_model.dart';
+import 'chat_url_model.dart';
+export 'chat_url_model.dart';
 
-class ChatWidget extends StatefulWidget {
-  const ChatWidget({super.key});
+class ChatUrlWidget extends StatefulWidget {
+  const ChatUrlWidget({super.key});
 
   @override
-  State<ChatWidget> createState() => _ChatWidgetState();
+  State<ChatUrlWidget> createState() => _ChatUrlWidgetState();
 }
 
-class _ChatWidgetState extends State<ChatWidget> {
-  late ChatModel _model;
+class _ChatUrlWidgetState extends State<ChatUrlWidget> {
+  late ChatUrlModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ChatModel());
+    _model = createModel(context, () => ChatUrlModel());
+
+    _model.urlController ??= TextEditingController();
+    _model.urlFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -44,8 +45,8 @@ class _ChatWidgetState extends State<ChatWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<List<PhotosPtRecord>>(
-      stream: queryPhotosPtRecord(
+    return StreamBuilder<List<PhotosRecord>>(
+      stream: queryPhotosRecord(
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -66,13 +67,13 @@ class _ChatWidgetState extends State<ChatWidget> {
             ),
           );
         }
-        List<PhotosPtRecord> chatPhotosPtRecordList = snapshot.data!;
+        List<PhotosRecord> chatUrlPhotosRecordList = snapshot.data!;
         // Return an empty Container when the item does not exist.
         if (snapshot.data!.isEmpty) {
           return Container();
         }
-        final chatPhotosPtRecord = chatPhotosPtRecordList.isNotEmpty
-            ? chatPhotosPtRecordList.first
+        final chatUrlPhotosRecord = chatUrlPhotosRecordList.isNotEmpty
+            ? chatUrlPhotosRecordList.first
             : null;
         return GestureDetector(
           onTap: () => _model.unfocusNode.canRequestFocus
@@ -90,10 +91,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onDoubleTap: () async {
-                  HapticFeedback.lightImpact();
-
                   context.pushNamed('chatboxpage');
 
+                  HapticFeedback.lightImpact();
                   await actions.ttssound();
                 },
                 child: FlutterFlowIconButton(
@@ -166,104 +166,85 @@ class _ChatWidgetState extends State<ChatWidget> {
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    await actions.ttsplacephoto();
-                                  },
-                                  onDoubleTap: () async {
-                                    final selectedMedia =
-                                        await selectMediaWithSourceBottomSheet(
-                                      context: context,
-                                      allowPhoto: true,
-                                    );
-                                    if (selectedMedia != null &&
-                                        selectedMedia.every((m) =>
-                                            validateFileFormat(
-                                                m.storagePath, context))) {
-                                      setState(
-                                          () => _model.isDataUploading = true);
-                                      var selectedUploadedFiles =
-                                          <FFUploadedFile>[];
-
-                                      var downloadUrls = <String>[];
-                                      try {
-                                        selectedUploadedFiles = selectedMedia
-                                            .map((m) => FFUploadedFile(
-                                                  name: m.storagePath
-                                                      .split('/')
-                                                      .last,
-                                                  bytes: m.bytes,
-                                                  height: m.dimensions?.height,
-                                                  width: m.dimensions?.width,
-                                                  blurHash: m.blurHash,
-                                                ))
-                                            .toList();
-
-                                        downloadUrls = (await Future.wait(
-                                          selectedMedia.map(
-                                            (m) async => await uploadData(
-                                                m.storagePath, m.bytes),
-                                          ),
-                                        ))
-                                            .where((u) => u != null)
-                                            .map((u) => u!)
-                                            .toList();
-                                      } finally {
-                                        _model.isDataUploading = false;
-                                      }
-                                      if (selectedUploadedFiles.length ==
-                                              selectedMedia.length &&
-                                          downloadUrls.length ==
-                                              selectedMedia.length) {
-                                        setState(() {
-                                          _model.uploadedLocalFile =
-                                              selectedUploadedFiles.first;
-                                          _model.uploadedFileUrl =
-                                              downloadUrls.first;
-                                        });
-                                      } else {
-                                        setState(() {});
-                                        return;
-                                      }
-                                    }
-
-                                    await actions.ttssound();
-                                  },
-                                  child: Container(
-                                    width: 320.0,
-                                    height: 299.0,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: Image.network(
-                                          _model.uploadedFileUrl,
-                                        ).image,
-                                      ),
-                                    ),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    _model.urlController.text,
+                                    width: 300.0,
+                                    height: 200.0,
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
-                                if (responsiveVisibility(
-                                  context: context,
-                                  phone: false,
-                                  tablet: false,
-                                  tabletLandscape: false,
-                                  desktop: false,
-                                ))
-                                  Text(
-                                    _model.uploadedFileUrl,
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      8.0, 0.0, 8.0, 0.0),
+                                  child: TextFormField(
+                                    controller: _model.urlController,
+                                    focusNode: _model.urlFocusNode,
+                                    autofocus: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Url of photo',
+                                      labelStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            fontSize: 30.0,
+                                            letterSpacing: 0.0,
+                                          ),
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            letterSpacing: 0.0,
+                                          ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .alternate,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                    ),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
                                           fontFamily: 'Readex Pro',
                                           letterSpacing: 0.0,
                                         ),
+                                    validator: _model.urlControllerValidator
+                                        .asValidator(context),
                                   ),
+                                ),
                                 Text(
                                   FFAppState().tts,
                                   style: FlutterFlowTheme.of(context)
@@ -285,16 +266,10 @@ class _ChatWidgetState extends State<ChatWidget> {
                                     onPressed: () async {
                                       var shouldSetState = false;
                                       await actions.ttssound();
-
-                                      await PhotosPtRecord.collection
-                                          .doc()
-                                          .set(createPhotosPtRecordData(
-                                            image: _model.uploadedFileUrl,
-                                          ));
                                       _model.output = await OpenAIAPIGroup
                                           .createChatCompletionCall
                                           .call(
-                                        image: _model.uploadedFileUrl,
+                                        image: _model.urlController.text,
                                       );
                                       shouldSetState = true;
                                       if ((_model.output?.succeeded ?? true)) {
@@ -315,7 +290,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                     },
                                     text: 'Chat',
                                     options: FFButtonOptions(
-                                      height: 81.0,
+                                      height: 67.0,
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           24.0, 0.0, 24.0, 0.0),
                                       iconPadding:

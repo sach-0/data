@@ -7,6 +7,8 @@ import 'schema/util/firestore_util.dart';
 
 import 'schema/user_record.dart';
 import 'schema/user_details_record.dart';
+import 'schema/photos_record.dart';
+import 'schema/photos_pt_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +18,8 @@ export 'schema/util/schema_util.dart';
 
 export 'schema/user_record.dart';
 export 'schema/user_details_record.dart';
+export 'schema/photos_record.dart';
+export 'schema/photos_pt_record.dart';
 
 /// Functions to query UserRecords (as a Stream and as a Future).
 Future<int> queryUserRecordCount({
@@ -86,6 +90,80 @@ Future<List<UserDetailsRecord>> queryUserDetailsRecordOnce({
     queryCollectionOnce(
       UserDetailsRecord.collection,
       UserDetailsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query PhotosRecords (as a Stream and as a Future).
+Future<int> queryPhotosRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PhotosRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<PhotosRecord>> queryPhotosRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      PhotosRecord.collection,
+      PhotosRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<PhotosRecord>> queryPhotosRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      PhotosRecord.collection,
+      PhotosRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query PhotosPtRecords (as a Stream and as a Future).
+Future<int> queryPhotosPtRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PhotosPtRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<PhotosPtRecord>> queryPhotosPtRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      PhotosPtRecord.collection,
+      PhotosPtRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<PhotosPtRecord>> queryPhotosPtRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      PhotosPtRecord.collection,
+      PhotosPtRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

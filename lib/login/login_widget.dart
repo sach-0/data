@@ -102,6 +102,8 @@ class _LoginWidgetState extends State<LoginWidget>
 
     _model.passwordConfirmController ??= TextEditingController();
     _model.passwordConfirmFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -376,7 +378,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                                           fontWeight:
                                                               FontWeight.w500,
                                                         ),
-                                                    minLines: null,
                                                     keyboardType: TextInputType
                                                         .emailAddress,
                                                     cursorColor:
@@ -505,7 +506,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                                           fontWeight:
                                                               FontWeight.w500,
                                                         ),
-                                                    minLines: null,
                                                     cursorColor:
                                                         const Color(0xFF4B39EF),
                                                     validator: _model
@@ -566,7 +566,10 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                   0.0,
                                                                   0.0,
                                                                   0.0),
-                                                      color: const Color(0xFF4B39EF),
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
                                                       textStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -768,7 +771,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                                           fontWeight:
                                                               FontWeight.w500,
                                                         ),
-                                                    minLines: null,
                                                     keyboardType: TextInputType
                                                         .emailAddress,
                                                     cursorColor:
@@ -897,7 +899,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                                           fontWeight:
                                                               FontWeight.w500,
                                                         ),
-                                                    minLines: null,
                                                     cursorColor:
                                                         const Color(0xFF4B39EF),
                                                     validator: _model
@@ -1025,6 +1026,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                                           fontWeight:
                                                               FontWeight.w500,
                                                         ),
+                                                    minLines: 1,
                                                     cursorColor:
                                                         const Color(0xFF4B39EF),
                                                     validator: _model
@@ -1101,7 +1103,10 @@ class _LoginWidgetState extends State<LoginWidget>
                                                                   0.0,
                                                                   0.0,
                                                                   0.0),
-                                                      color: const Color(0xFF4B39EF),
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
                                                       textStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -1201,7 +1206,7 @@ class _LoginWidgetState extends State<LoginWidget>
                       image: const DecorationImage(
                         fit: BoxFit.cover,
                         image: CachedNetworkImageProvider(
-                          'https://images.unsplash.com/photo-1508385082359-f38ae991e8f2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80',
+                          'https://cdn.discordapp.com/attachments/1159327006085885952/1228175987959926784/image-1.png?ex=662b1705&is=6618a205&hm=a133e86315736f5fa7ff72aae139f71fdf2200aa7204b94185501c5de006bcc4&',
                         ),
                       ),
                       borderRadius: BorderRadius.circular(0.0),

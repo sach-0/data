@@ -10,25 +10,25 @@ import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'chat_model.dart';
-export 'chat_model.dart';
+import 'price_tag_model.dart';
+export 'price_tag_model.dart';
 
-class ChatWidget extends StatefulWidget {
-  const ChatWidget({super.key});
+class PriceTagWidget extends StatefulWidget {
+  const PriceTagWidget({super.key});
 
   @override
-  State<ChatWidget> createState() => _ChatWidgetState();
+  State<PriceTagWidget> createState() => _PriceTagWidgetState();
 }
 
-class _ChatWidgetState extends State<ChatWidget> {
-  late ChatModel _model;
+class _PriceTagWidgetState extends State<PriceTagWidget> {
+  late PriceTagModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ChatModel());
+    _model = createModel(context, () => PriceTagModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -44,8 +44,8 @@ class _ChatWidgetState extends State<ChatWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<List<PhotosPtRecord>>(
-      stream: queryPhotosPtRecord(
+    return StreamBuilder<List<PhotosRecord>>(
+      stream: queryPhotosRecord(
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -66,13 +66,13 @@ class _ChatWidgetState extends State<ChatWidget> {
             ),
           );
         }
-        List<PhotosPtRecord> chatPhotosPtRecordList = snapshot.data!;
+        List<PhotosRecord> priceTagPhotosRecordList = snapshot.data!;
         // Return an empty Container when the item does not exist.
         if (snapshot.data!.isEmpty) {
           return Container();
         }
-        final chatPhotosPtRecord = chatPhotosPtRecordList.isNotEmpty
-            ? chatPhotosPtRecordList.first
+        final priceTagPhotosRecord = priceTagPhotosRecordList.isNotEmpty
+            ? priceTagPhotosRecordList.first
             : null;
         return GestureDetector(
           onTap: () => _model.unfocusNode.canRequestFocus
@@ -90,9 +90,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onDoubleTap: () async {
-                  HapticFeedback.lightImpact();
-
-                  context.pushNamed('chatboxpage');
+                  context.pushNamed('PriceTagPage');
 
                   await actions.ttssound();
                 },
@@ -234,8 +232,8 @@ class _ChatWidgetState extends State<ChatWidget> {
                                     await actions.ttssound();
                                   },
                                   child: Container(
-                                    width: 320.0,
-                                    height: 299.0,
+                                    width: 351.0,
+                                    height: 312.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
@@ -292,9 +290,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                                             image: _model.uploadedFileUrl,
                                           ));
                                       _model.output = await OpenAIAPIGroup
-                                          .createChatCompletionCall
+                                          .createChatCompletionTwoCall
                                           .call(
-                                        image: _model.uploadedFileUrl,
+                                        image1: _model.uploadedFileUrl,
                                       );
                                       shouldSetState = true;
                                       if ((_model.output?.succeeded ?? true)) {
@@ -315,7 +313,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                     },
                                     text: 'Chat',
                                     options: FFButtonOptions(
-                                      height: 81.0,
+                                      height: 91.0,
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           24.0, 0.0, 24.0, 0.0),
                                       iconPadding:

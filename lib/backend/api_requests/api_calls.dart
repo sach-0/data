@@ -14,6 +14,8 @@ class OpenAIAPIGroup {
   static Map<String, String> headers = {};
   static CreateChatCompletionCall createChatCompletionCall =
       CreateChatCompletionCall();
+  static CreateChatCompletionTwoCall createChatCompletionTwoCall =
+      CreateChatCompletionTwoCall();
   static CreateCompletionCall createCompletionCall = CreateCompletionCall();
   static CreateImageCall createImageCall = CreateImageCall();
   static CreateImageEditCall createImageEditCall = CreateImageEditCall();
@@ -94,7 +96,7 @@ class CreateChatCompletionCall {
       "content": [
         {
           "type": "text",
-          "text": "Direaly describe the subject as much detail as you can (with colors , shape ) and limit it in 30-50 words."
+          "text": "Direaly describe the subject as much detail as you can (with colors , shape ) to visually impaired individuals and limit it in 30-50 words , but if there are wordings,igord the word limit and print out all the wordings in english. "
         },
         {
           "type": "image_url",
@@ -109,6 +111,63 @@ class CreateChatCompletionCall {
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'createChatCompletion',
+      apiUrl: '${OpenAIAPIGroup.baseUrl}/chat/completions',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer $apiKeys',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  String? content(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.choices[:].message.content''',
+      ));
+  dynamic tx(dynamic response) => getJsonField(
+        response,
+        r'''$.choices[:].message''',
+      );
+}
+
+class CreateChatCompletionTwoCall {
+  Future<ApiCallResponse> call({
+    String? image1 = '',
+    String? qu = '',
+    String? msg1 = '',
+    String? apiKeys = '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',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "model": "gpt-4-vision-preview",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Give me the price tags on the product only , display the result like' 199 ' only"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "$image1"
+          }
+        }
+      ]
+    }
+  ],
+  "max_tokens": 300
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'createChatCompletion two',
       apiUrl: '${OpenAIAPIGroup.baseUrl}/chat/completions',
       callType: ApiCallType.POST,
       headers: {

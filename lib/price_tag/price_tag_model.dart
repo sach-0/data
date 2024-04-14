@@ -1,9 +1,9 @@
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'chat_widget.dart' show ChatWidget;
+import 'price_tag_widget.dart' show PriceTagWidget;
 import 'package:flutter/material.dart';
 
-class ChatModel extends FlutterFlowModel<ChatWidget> {
+class PriceTagModel extends FlutterFlowModel<PriceTagWidget> {
   ///  Local state fields for this page.
 
   bool? isEd = false;
@@ -18,7 +18,7 @@ class ChatModel extends FlutterFlowModel<ChatWidget> {
       FFUploadedFile(bytes: Uint8List.fromList([]));
   String uploadedFileUrl = '';
 
-  // Stores action output result for [Backend Call - API (createChatCompletion)] action in Button widget.
+  // Stores action output result for [Backend Call - API (createChatCompletion two)] action in Button widget.
   ApiCallResponse? output;
 
   @override

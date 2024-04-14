@@ -1,9 +1,9 @@
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'chat_widget.dart' show ChatWidget;
+import 'price_tag_url_widget.dart' show PriceTagUrlWidget;
 import 'package:flutter/material.dart';
 
-class ChatModel extends FlutterFlowModel<ChatWidget> {
+class PriceTagUrlModel extends FlutterFlowModel<PriceTagUrlWidget> {
   ///  Local state fields for this page.
 
   bool? isEd = false;
@@ -13,13 +13,12 @@ class ChatModel extends FlutterFlowModel<ChatWidget> {
   final unfocusNode = FocusNode();
   // State field(s) for ListView widget.
   ScrollController? listViewController;
-  bool isDataUploading = false;
-  FFUploadedFile uploadedLocalFile =
-      FFUploadedFile(bytes: Uint8List.fromList([]));
-  String uploadedFileUrl = '';
-
-  // Stores action output result for [Backend Call - API (createChatCompletion)] action in Button widget.
-  ApiCallResponse? output;
+  // State field(s) for Url widget.
+  FocusNode? urlFocusNode;
+  TextEditingController? urlController;
+  String? Function(BuildContext, String?)? urlControllerValidator;
+  // Stores action output result for [Backend Call - API (createChatCompletion two)] action in Button widget.
+  ApiCallResponse? outp;
 
   @override
   void initState(BuildContext context) {
@@ -30,5 +29,7 @@ class ChatModel extends FlutterFlowModel<ChatWidget> {
   void dispose() {
     unfocusNode.dispose();
     listViewController?.dispose();
+    urlFocusNode?.dispose();
+    urlController?.dispose();
   }
 }
